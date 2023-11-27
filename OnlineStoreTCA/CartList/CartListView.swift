@@ -12,24 +12,23 @@ struct CartListView: View {
     let store: Store<CartListDomain.State, CartListDomain.Action>
     
     var body: some View {
-        WithViewStore(self.store) { viewStore in
+        WithViewStore(self.store, observe: { $0 }) { viewStore in
             ZStack {
                 NavigationStack {
                     Group {
-                        if viewStore.cartItems.isEmpty {
+                        if viewStore.state.cartItems.isEmpty {
                             Text("Oops, your cart is empty! \n")
                                 .font(.custom("AmericanTypewriter", size: 25))
                         } else {
                             List {
-                                ForEachStore(
-                                    self.store.scope(
-                                        state: \.cartItems,
-                                        action: CartListDomain.Action
-                                            .cartItem(id:action:)
-                                    )
-                                ) {
-                                    CartCell(store: $0)
-                                }
+//                                ForEachStore(
+//                                    self.store.scope(
+//                                        state: \.cartItems,
+//                                        action: \.cartItem(id:action:)
+//                                    )
+//                                ) {
+//                                    CartCell(store: $0)
+//                                }
                             }
                             .safeAreaInset(edge: .bottom) {
                                 Button {
@@ -70,27 +69,27 @@ struct CartListView: View {
                     .onAppear {
                         viewStore.send(.getTotalPrice)
                     }
-                    .alert(
-                        self.store.scope(
-                            state: \.confirmationAlert,
-                            action: { $0 } // context: https://github.com/pointfreeco/swift-composable-architecture/commit/da205c71ae72081647dfa1442c811a57181fb990
-                        ),
-                        dismiss: .didCancelConfirmation
-                    )
-                    .alert(
-                        self.store.scope(
-                            state: \.successAlert,
-                            action: { $0 }
-                        ),
-                        dismiss: .dismissSuccessAlert
-                    )
-                    .alert(
-                        self.store.scope(
-                            state: \.errorAlert,
-                            action: { $0 }
-                        ),
-                        dismiss: .dismissErrorAlert
-                    )
+//                    .alert(
+//                        self.store.scope(
+//                            state: \.confirmationAlert,
+//                            action: { $0 } // context: https://github.com/pointfreeco/swift-composable-architecture/commit/da205c71ae72081647dfa1442c811a57181fb990
+//                        ),
+//                        dismiss: .didCancelConfirmation
+//                    )
+//                    .alert(
+//                        self.store.scope(
+//                            state: \.successAlert,
+//                            action: { $0 }
+//                        ),
+//                        dismiss: .dismissSuccessAlert
+//                    )
+//                    .alert(
+//                        self.store.scope(
+//                            state: \.errorAlert,
+//                            action: { $0 }
+//                        ),
+//                        dismiss: .dismissErrorAlert
+//                    )
                 }
                 if viewStore.isRequestInProcess {
                     Color.black.opacity(0.2)
@@ -117,7 +116,9 @@ struct CartListView_Previews: PreviewProvider {
                             }
                     )
                 ),
-                reducer: CartListDomain(sendOrder: { _ in "OK" })
+                reducer: {
+                    CartListDomain(sendOrder: { _ in "OK" })
+                }
             )
         )
     }

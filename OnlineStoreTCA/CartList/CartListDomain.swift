@@ -8,7 +8,8 @@
 import Foundation
 import ComposableArchitecture
 
-struct CartListDomain: ReducerProtocol {
+@Reducer
+struct CartListDomain {
     struct State: Equatable {
         var dataLoadingStatus = DataLoadingStatus.notStarted
         var cartItems: IdentifiedArrayOf<CartItemDomain.State> = []
@@ -44,12 +45,12 @@ struct CartListDomain: ReducerProtocol {
     
     private func verifyPayButtonVisibility(
         state: inout State
-    ) -> EffectTask<Action> {
+    ) -> Effect<Action> {
         state.isPayButtonDisable = state.totalPrice == 0.0
         return .none
     }
     
-    var body: some ReducerProtocol<State, Action> {
+    var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
             case .didPressCloseButton:
@@ -58,7 +59,10 @@ struct CartListDomain: ReducerProtocol {
                 switch action {
                 case .deleteCartItem:
                     state.cartItems.remove(id: id)
-                    return EffectTask(value: .getTotalPrice)
+                    
+                    return .run { send in
+                        await send(.getTotalPrice)
+                    }
                 }
             case .getTotalPrice:
                 let items = state.cartItems.map { $0.cartItem }
@@ -116,12 +120,13 @@ struct CartListDomain: ReducerProtocol {
             case .didConfirmPurchase:
                 state.dataLoadingStatus = .loading
                 let items = state.cartItems.map { $0.cartItem }
-                return .task {
-                    await .didReceivePurchaseResponse(
+                
+                return .run { send in
+                    await send(.didReceivePurchaseResponse(
                         TaskResult{
                             try await sendOrder(items)
                         }
-                    )
+                    ))
                 }
             }
         }

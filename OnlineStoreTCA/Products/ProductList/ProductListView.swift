@@ -12,8 +12,7 @@ struct ProductListView: View {
     let store: Store<ProductListDomain.State,ProductListDomain.Action>
     
     var body: some View {
-        WithViewStore(self.store) { viewStore in
-            NavigationView {
+        WithViewStore(self.store, observe: { $0 }) { viewStore in            NavigationView {
                 Group {
                     if viewStore.isLoading {
                         ProgressView()

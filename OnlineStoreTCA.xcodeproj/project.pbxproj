@@ -24,7 +24,6 @@
 		B5389D1528B9AAA4002BF611 /* OnlineStoreTCATests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5389D1428B9AAA4002BF611 /* OnlineStoreTCATests.swift */; };
 		B5389D1B28B9AAC6002BF611 /* AddToCartDomainTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = B556E18428B919FB00CB51F4 /* AddToCartDomainTest.swift */; };
 		B556E16428B5C44000CB51F4 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = B556E16328B5C44000CB51F4 /* APIClient.swift */; };
-		B556E16B28B5CEA900CB51F4 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = B556E16A28B5CEA900CB51F4 /* ComposableArchitecture */; };
 		B556E17928B671AC00CB51F4 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B556E17828B671AC00CB51F4 /* RootView.swift */; };
 		B556E17B28B6740A00CB51F4 /* RootDomain.swift in Sources */ = {isa = PBXBuildFile; fileRef = B556E17A28B6740A00CB51F4 /* RootDomain.swift */; };
 		B556E17D28B7BE1600CB51F4 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B556E17C28B7BE1600CB51F4 /* ProfileView.swift */; };
@@ -37,6 +36,7 @@
 		B5BE68DB28BA6EA8008FC353 /* ProductDomainTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5BE68D928BA6EA4008FC353 /* ProductDomainTest.swift */; };
 		B5BE68DF28BB23B1008FC353 /* ProductListDomainTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5BE68DD28BB23AC008FC353 /* ProductListDomainTest.swift */; };
 		B5BE68E128BBAE93008FC353 /* DataLoadingStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5BE68E028BBAE93008FC353 /* DataLoadingStatus.swift */; };
+		EC40F5CB2B14C1B900EE456E /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = EC40F5CA2B14C1B900EE456E /* ComposableArchitecture */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -95,7 +95,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B556E16B28B5CEA900CB51F4 /* ComposableArchitecture in Frameworks */,
+				EC40F5CB2B14C1B900EE456E /* ComposableArchitecture in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -310,7 +310,7 @@
 			);
 			name = OnlineStoreTCA;
 			packageProductDependencies = (
-				B556E16A28B5CEA900CB51F4 /* ComposableArchitecture */,
+				EC40F5CA2B14C1B900EE456E /* ComposableArchitecture */,
 			);
 			productName = OnlineStoreTCA;
 			productReference = B5A5CFB1289C257900AC3E5E /* OnlineStoreTCA.app */;
@@ -345,7 +345,7 @@
 			);
 			mainGroup = B5A5CFA8289C257900AC3E5E;
 			packageReferences = (
-				B556E16928B5CEA900CB51F4 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
+				EC40F5C92B14C1B900EE456E /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
 			);
 			productRefGroup = B5A5CFB2289C257900AC3E5E /* Products */;
 			projectDirPath = "";
@@ -674,20 +674,20 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		B556E16928B5CEA900CB51F4 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */ = {
+		EC40F5C92B14C1B900EE456E /* XCRemoteSwiftPackageReference "swift-composable-architecture" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/pointfreeco/swift-composable-architecture.git";
+			repositoryURL = "https://github.com/pointfreeco/swift-composable-architecture";
 			requirement = {
 				kind = exactVersion;
-				version = 0.54.0;
+				version = 1.4.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		B556E16A28B5CEA900CB51F4 /* ComposableArchitecture */ = {
+		EC40F5CA2B14C1B900EE456E /* ComposableArchitecture */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = B556E16928B5CEA900CB51F4 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
+			package = EC40F5C92B14C1B900EE456E /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
 			productName = ComposableArchitecture;
 		};
 /* End XCSwiftPackageProductDependency section */

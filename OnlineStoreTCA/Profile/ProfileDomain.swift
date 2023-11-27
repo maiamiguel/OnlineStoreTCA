@@ -8,7 +8,8 @@
 import Foundation
 import ComposableArchitecture
 
-struct ProfileDomain: ReducerProtocol {
+@Reducer
+struct ProfileDomain {
     struct State: Equatable {
         var profile: UserProfile = .default
         fileprivate var dataState = DataState.notStarted
@@ -30,27 +31,29 @@ struct ProfileDomain: ReducerProtocol {
     
     var fetchUserProfile: () async throws -> UserProfile
     
-    func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
-        switch action {
-        case .fetchUserProfile:
-            if state.dataState == .complete || state.dataState == .loading {
+    var body: some Reducer<State, Action> {
+        Reduce { state, action in
+            switch action {
+            case .fetchUserProfile:
+                if state.dataState == .complete || state.dataState == .loading {
+                    return .none
+                }
+                state.dataState = .loading
+
+                return .run { send in
+                    await send(.fetchUserProfileResponse(
+                        TaskResult { try await fetchUserProfile() }
+                    ))
+                }
+            case .fetchUserProfileResponse(.success(let profile)):
+                state.dataState = .complete
+                state.profile = profile
+                return .none
+            case .fetchUserProfileResponse(.failure(let error)):
+                state.dataState = .complete
+                print("Error: \(error)")
                 return .none
             }
-            
-            state.dataState = .loading
-            return .task {
-                await .fetchUserProfileResponse(
-                    TaskResult { try await fetchUserProfile() }
-                )
-            }
-        case .fetchUserProfileResponse(.success(let profile)):
-            state.dataState = .complete
-            state.profile = profile
-            return .none
-        case .fetchUserProfileResponse(.failure(let error)):
-            state.dataState = .complete
-            print("Error: \(error)")
-            return .none
         }
     }
 }

@@ -8,7 +8,8 @@
 import Foundation
 import ComposableArchitecture
 
-struct RootDomain: ReducerProtocol {
+@Reducer
+struct RootDomain {
     struct State: Equatable {
         var selectedTab = Tab.products
         var productListState = ProductListDomain.State()
@@ -38,7 +39,7 @@ struct RootDomain: ReducerProtocol {
         uuid: { UUID() }
     )
     
-    var body: some ReducerProtocol<State, Action> {
+    var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
             case .productList:
