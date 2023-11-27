@@ -15,7 +15,8 @@ struct CartListDomain {
         var cartItems: IdentifiedArrayOf<CartItemDomain.State> = []
         var totalPrice: Double = 0.0
         var isPayButtonDisable = false
-        var confirmationAlert: AlertState<Action>?
+        
+        @PresentationState var confirmationAlert: AlertState<Action.Alert>?
         var errorAlert: AlertState<Action>?
         var successAlert: AlertState<Action>?
         
@@ -31,14 +32,20 @@ struct CartListDomain {
     
     enum Action: Equatable {
         case didPressCloseButton
-        case cartItem(id: CartItemDomain.State.ID, action: CartItemDomain.Action)
+        case cartItem(IdentifiedActionOf<CartItemDomain>)
         case getTotalPrice
         case didPressPayButton
         case didReceivePurchaseResponse(TaskResult<String>)
-        case didConfirmPurchase
-        case didCancelConfirmation
+
         case dismissSuccessAlert
         case dismissErrorAlert
+        
+        case confirmationAlert(PresentationAction<Alert>)
+        
+        enum Alert: Equatable {
+            case didConfirmPurchase
+            case didCancelConfirmation
+        }
     }
     
     let sendOrder: ([CartItem]) async throws -> String
@@ -55,7 +62,7 @@ struct CartListDomain {
             switch action {
             case .didPressCloseButton:
                 return .none
-            case .cartItem(let id, let action):
+            case .cartItem(.element(let id, let action)):
                 switch action {
                 case .deleteCartItem:
                     state.cartItems.remove(id: id)
@@ -86,7 +93,8 @@ struct CartListDomain {
                     ]
                 )
                 return .none
-            case .didCancelConfirmation:
+                
+            case .confirmationAlert(.presented(.didCancelConfirmation)):
                 state.confirmationAlert = nil
                 return .none
             case .dismissSuccessAlert:
@@ -117,7 +125,8 @@ struct CartListDomain {
                 )
                 print("Error sending your order:", error.localizedDescription)
                 return .none
-            case .didConfirmPurchase:
+                
+            case .confirmationAlert(.presented(.didConfirmPurchase)):
                 state.dataLoadingStatus = .loading
                 let items = state.cartItems.map { $0.cartItem }
                 
@@ -128,9 +137,12 @@ struct CartListDomain {
                         }
                     ))
                 }
+                
+            case .confirmationAlert:
+              return .none
             }
         }
-        .forEach(\.cartItems, action: /Action.cartItem(id:action:)) {
+        .forEach(\.cartItems, action: \.cartItem) {
             CartItemDomain()
         }
     }

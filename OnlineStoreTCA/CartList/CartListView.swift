@@ -21,14 +21,14 @@ struct CartListView: View {
                                 .font(.custom("AmericanTypewriter", size: 25))
                         } else {
                             List {
-//                                ForEachStore(
-//                                    self.store.scope(
-//                                        state: \.cartItems,
-//                                        action: \.cartItem(id:action:)
-//                                    )
-//                                ) {
-//                                    CartCell(store: $0)
-//                                }
+                                ForEachStore(
+                                    self.store.scope(
+                                        state: \.cartItems,
+                                        action: \.cartItem
+                                    )
+                                ) {
+                                    CartCell(store: $0)
+                                }
                             }
                             .safeAreaInset(edge: .bottom) {
                                 Button {
@@ -69,13 +69,12 @@ struct CartListView: View {
                     .onAppear {
                         viewStore.send(.getTotalPrice)
                     }
-//                    .alert(
-//                        self.store.scope(
-//                            state: \.confirmationAlert,
-//                            action: { $0 } // context: https://github.com/pointfreeco/swift-composable-architecture/commit/da205c71ae72081647dfa1442c811a57181fb990
-//                        ),
-//                        dismiss: .didCancelConfirmation
-//                    )
+                    .alert(
+                        store: self.store.scope(
+                            state: \.$confirmationAlert,
+                            action: \.confirmationAlert
+                        )
+                    )
 //                    .alert(
 //                        self.store.scope(
 //                            state: \.successAlert,

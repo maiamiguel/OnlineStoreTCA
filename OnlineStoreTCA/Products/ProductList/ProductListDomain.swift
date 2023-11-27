@@ -80,7 +80,7 @@ struct ProductListDomain {
                     return .run { send in
                         await send(.closeCart)
                     }
-                case .cartItem(_, let action):
+                case .cartItem(.element(_, let action)):
                     switch action {
                     case .deleteCartItem(let product):
                         return .run { send in
