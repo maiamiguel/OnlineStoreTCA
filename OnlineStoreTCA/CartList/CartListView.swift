@@ -75,20 +75,18 @@ struct CartListView: View {
                             action: \.confirmationAlert
                         )
                     )
-//                    .alert(
-//                        self.store.scope(
-//                            state: \.successAlert,
-//                            action: { $0 }
-//                        ),
-//                        dismiss: .dismissSuccessAlert
-//                    )
-//                    .alert(
-//                        self.store.scope(
-//                            state: \.errorAlert,
-//                            action: { $0 }
-//                        ),
-//                        dismiss: .dismissErrorAlert
-//                    )
+                    .alert(
+                        store: self.store.scope(
+                            state: \.$successAlert,
+                            action: \.successAlert
+                        )
+                    )
+                    .alert(
+                        store: self.store.scope(
+                            state: \.$errorAlert,
+                            action: \.errorAlert
+                        )
+                    )
                 }
                 if viewStore.isRequestInProcess {
                     Color.black.opacity(0.2)

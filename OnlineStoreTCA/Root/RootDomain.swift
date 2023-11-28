@@ -33,9 +33,9 @@ struct RootDomain {
     var uuid: @Sendable () -> UUID
     
     static let live = Self(
-        fetchProducts: APIClient.live.fetchProducts,
-        sendOrder: APIClient.live.sendOrder,
-        fetchUserProfile: APIClient.live.fetchUserProfile,
+        fetchProducts: APIClient.demo.fetchProducts,
+        sendOrder: APIClient.demo.sendOrder,
+        fetchUserProfile: APIClient.demo.fetchUserProfile,
         uuid: { UUID() }
     )
     

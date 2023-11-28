@@ -17,8 +17,8 @@ struct CartListDomain {
         var isPayButtonDisable = false
         
         @PresentationState var confirmationAlert: AlertState<Action.Alert>?
-        var errorAlert: AlertState<Action>?
-        var successAlert: AlertState<Action>?
+        @PresentationState var errorAlert: AlertState<Action.Alert>?
+        @PresentationState var successAlert: AlertState<Action.Alert>?
         
         var totalPriceString: String {
             let roundedValue = round(totalPrice * 100) / 100.0
@@ -36,15 +36,16 @@ struct CartListDomain {
         case getTotalPrice
         case didPressPayButton
         case didReceivePurchaseResponse(TaskResult<String>)
-
-        case dismissSuccessAlert
-        case dismissErrorAlert
         
         case confirmationAlert(PresentationAction<Alert>)
+        case errorAlert(PresentationAction<Alert>)
+        case successAlert(PresentationAction<Alert>)
         
         enum Alert: Equatable {
             case didConfirmPurchase
             case didCancelConfirmation
+            case dismissSuccessAlert
+            case dismissErrorAlert
         }
     }
     
@@ -97,10 +98,10 @@ struct CartListDomain {
             case .confirmationAlert(.presented(.didCancelConfirmation)):
                 state.confirmationAlert = nil
                 return .none
-            case .dismissSuccessAlert:
+            case .successAlert(.presented(.dismissSuccessAlert)):
                 state.successAlert = nil
                 return .none
-            case .dismissErrorAlert:
+            case .errorAlert(.presented(.dismissErrorAlert)):
                 state.errorAlert = nil
                 return .none
             case .didReceivePurchaseResponse(.success(let message)):
@@ -140,8 +141,15 @@ struct CartListDomain {
                 
             case .confirmationAlert:
               return .none
+            case .successAlert:
+                return .none
+            case .errorAlert:
+                return .none
             }
         }
+        .ifLet(\.$confirmationAlert, action: \.confirmationAlert)
+        .ifLet(\.$errorAlert, action: \.errorAlert)
+        .ifLet(\.$successAlert, action: \.successAlert)
         .forEach(\.cartItems, action: \.cartItem) {
             CartItemDomain()
         }

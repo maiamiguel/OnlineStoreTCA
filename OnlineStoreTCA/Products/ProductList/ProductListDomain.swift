@@ -74,12 +74,13 @@ struct ProductListDomain {
                 switch action {
                 case .didPressCloseButton:
                     return closeCart(state: &state)
-                case .dismissSuccessAlert:
-                    resetProductsToZero(state: &state)
-                    
-                    return .run { send in
-                        await send(.closeCart)
-                    }
+                
+//                case .successAlert(.presented(.dismissSuccessAlert)):
+//                    resetProductsToZero(state: &state)
+//                    
+//                    return .run { send in
+//                        await send(.closeCart)
+//                    }
                 case .cartItem(.element(_, let action)):
                     switch action {
                     case .deleteCartItem(let product):
