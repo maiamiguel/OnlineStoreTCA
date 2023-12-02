@@ -36,15 +36,19 @@ class CartListDomainTest: XCTestCase {
         
         let store = TestStore(
             initialState: CartListDomain.State(cartItems: cartItems),
-            reducer: CartListDomain(
-                sendOrder: { _ in fatalError("unimplemented") }
-            )
+            reducer: {
+                CartListDomain(
+                    sendOrder: { _ in fatalError("unimplemented") }
+                )
+            }
         )
         
         await store.send(
             .cartItem(
-                id: cartItemId1,
-                action: .deleteCartItem(product: Product.sample[0])
+                .element(
+                    id: cartItemId1,
+                    action: .deleteCartItem(product: Product.sample[0])
+                )
             )
         ) {
             $0.cartItems = [
@@ -88,15 +92,19 @@ class CartListDomainTest: XCTestCase {
         
         let store = TestStore(
             initialState: CartListDomain.State(cartItems: cartItems),
-            reducer: CartListDomain(
-                sendOrder: { _ in fatalError("unimplemented") }
-            )
+            reducer: {
+                CartListDomain(
+                    sendOrder: { _ in fatalError("unimplemented") }
+                )
+            }
         )
         
         await store.send(
             .cartItem(
-                id: cartItemId1,
-                action: .deleteCartItem(product: Product.sample[0])
+                .element(
+                    id: cartItemId1,
+                    action: .deleteCartItem(product: Product.sample[0])
+                )
             )
         ) {
             $0.cartItems = [
@@ -117,8 +125,10 @@ class CartListDomainTest: XCTestCase {
         
         await store.send(
             .cartItem(
-                id: cartItemId2,
-                action: .deleteCartItem(product: Product.sample[1])
+                .element(
+                    id: cartItemId2,
+                    action: .deleteCartItem(product: Product.sample[1])
+                )
             )
         ) {
             $0.cartItems = []
@@ -155,12 +165,14 @@ class CartListDomainTest: XCTestCase {
         
         let store = TestStore(
             initialState: CartListDomain.State(cartItems: cartItems),
-            reducer: CartListDomain(
-                sendOrder: { _ in "Success" }
-            )
+            reducer: {
+                CartListDomain(
+                    sendOrder: { _ in "Success" }
+                )
+            }
         )
         
-        await store.send(.didConfirmPurchase) {
+        await store.send(.confirmationAlert(.presented(.didConfirmPurchase))) {
             $0.dataLoadingStatus = .loading
         }
         
@@ -201,15 +213,16 @@ class CartListDomainTest: XCTestCase {
         
         let store = TestStore(
             initialState: CartListDomain.State(cartItems: cartItems),
-            reducer: CartListDomain(
-                sendOrder: { _ in throw APIClient.Failure() }
-            )
+            reducer: {
+                CartListDomain(
+                    sendOrder: { _ in throw APIClient.Failure() }
+                )
+            }
         )
         
-        await store.send(.didConfirmPurchase) {
+        await store.send(.confirmationAlert(.presented(.didConfirmPurchase))) {
             $0.dataLoadingStatus = .loading
         }
-        
         
         await store.receive(.didReceivePurchaseResponse(.failure(APIClient.Failure()))) {
             $0.dataLoadingStatus = .error
