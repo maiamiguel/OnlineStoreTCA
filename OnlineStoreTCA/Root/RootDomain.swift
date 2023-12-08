@@ -58,7 +58,7 @@ struct RootDomain {
                 uuid: uuid
             )
         }
-        Scope(state:  \.profileState, action: /RootDomain.Action.profile) {
+        Scope(state: \.profileState, action: /RootDomain.Action.profile) {
             ProfileDomain(fetchUserProfile: fetchUserProfile)
         }
     }
